@@ -20,7 +20,7 @@ const articles = defineCollection({
     image: z.string().url(),
     href: z.string().url(),
     tags: z.array(z.string()),
-    date: z.string()
+    date: z.string().or(z.date())
   })
 });
 

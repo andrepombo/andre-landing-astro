@@ -1,0 +1,41 @@
+---
+export interface ProjectFrontmatter {
+  title: string;
+  description: string;
+  image: string;
+  href: string;
+  tags: string[];
+  highlight?: string;
+}
+// Items come from Astro.glob('../content/projects/*.mdx')
+const { items } = Astro.props as { items: Array<{ url?: string; frontmatter: ProjectFrontmatter }>; };
+---
+<section id="projects" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+  <div class="flex items-end justify-between gap-6 mb-6">
+    <div>
+      <h2 class="text-2xl font-semibold tracking-tight">Projects</h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300">Case studies and experiments.</p>
+    </div>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {items.map((p) => (
+      <a href={p.frontmatter.href} target="_blank" class="group block rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:border-[--color-accent-300] hover:shadow-[0_10px_30px_-10px_rgba(99,102,241,.25)] transition">
+        <div class="aspect-video bg-slate-100 dark:bg-slate-900 overflow-hidden">
+          <img src={p.frontmatter.image} alt="" class="h-full w-full object-cover group-hover:scale-[1.03] transition" loading="lazy" />
+        </div>
+        <div class="p-4 space-y-2">
+          <div class="flex items-center justify-between gap-3">
+            <h3 class="font-semibold">{p.frontmatter.title}</h3>
+            {p.frontmatter.highlight && <span class="text-xs text-slate-500 dark:text-slate-400">{p.frontmatter.highlight}</span>}
+          </div>
+          <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{p.frontmatter.description}</p>
+          <div class="flex flex-wrap gap-2 pt-1">
+            {p.frontmatter.tags.map((t) => (
+              <span class="text-xs px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">{t}</span>
+            ))}
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
