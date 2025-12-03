@@ -7,13 +7,13 @@ export interface ArticleFrontmatter {
   tags: string[];
   date: string | Date;
 }
-const { items } = Astro.props as { items: Array<{ url?: string; frontmatter: ArticleFrontmatter }>; };
+const { items, lang = 'en' } = Astro.props as { items: Array<{ url?: string; frontmatter: ArticleFrontmatter }>; lang?: 'en' | 'pt' };
 ---
 <section id="articles" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
   <div class="flex items-end justify-between gap-6 mb-6">
     <div>
-      <h2 class="text-2xl font-semibold tracking-tight">Articles</h2>
-      <p class="text-sm text-slate-600 dark:text-slate-300">Writing on dev, architecture, and tooling.</p>
+      <h2 class="text-2xl font-semibold tracking-tight">{lang === 'en' ? 'Articles' : 'Artigos'}</h2>
+      <p class="text-sm text-slate-600 dark:text-slate-300">{lang === 'en' ? 'Writing on dev, architecture, and tooling.' : 'Textos sobre dev, arquitetura e ferramentas.'}</p>
     </div>
   </div>
   <div class="space-y-4">
