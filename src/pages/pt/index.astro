@@ -4,6 +4,7 @@ import Hero from '../../components/Hero.astro';
 import Projects from '../../components/Projects.astro';
 import Articles from '../../components/Articles.astro';
 import Footer from '../../components/Footer.astro';
+import SocialIcons from '../../components/SocialIcons.tsx';
 
 const lang: 'en' | 'pt' = 'pt';
 const toggleUrl = '/';
@@ -14,7 +15,7 @@ const meta = {
   subhead: 'Desenvolvedor full‑stack do Brasil. Eu projeto, construo e entrego aplicativos em produção de ponta a ponta — da arquitetura de backend e UX de frontend ao CI/CD e à infraestrutura em nuvem.',
   avatar: 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=600&auto=format&fit=crop',
   badges: ['Python', 'Django', 'React', 'DevOps', 'CI/CD', 'AWS'],
-  cta: { label: 'Enviar email', href: 'mailto:hello@example.com' },
+  cta: { label: 'andrebastos85@gmail.com', href: 'mailto:andrebastos85@gmail.com' },
   links: { github: 'https://github.com/andrepombo', x: 'https://x.com/', linkedin: 'https://www.linkedin.com/', medium: 'https://medium.com/' }
 };
 
@@ -33,7 +34,16 @@ const articleFiles = await Astro.glob('../../content/articles/*.mdx');
           <h2 class="text-2xl font-semibold tracking-tight">Vamos construir algo incrível</h2>
           <p class="text-sm text-slate-600 dark:text-slate-300">Estou aberto a consultoria, colaboração e oportunidades onde eu possa gerar impacto.</p>
         </div>
-        <a href={meta.cta.href} class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[--color-accent-600] text-white hover:bg-[--color-accent-500]">{meta.cta.label}</a>
+        <div class="flex items-center gap-3">
+          <SocialIcons client:load github={meta.links.github} linkedin={meta.links.linkedin} />
+          <a href={meta.cta.href} class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-gray-900 dark:hover:border-white hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 text-gray-600 dark:text-gray-400 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="20" height="16" x="2" y="4" rx="2" />
+              <path d="m22 7-8.97 5.7a2 2 0 0 1-2.06 0L2 7" />
+            </svg>
+            <span>{meta.cta.label}</span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
