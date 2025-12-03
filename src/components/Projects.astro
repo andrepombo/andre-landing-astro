@@ -12,11 +12,11 @@ export interface ProjectFrontmatter {
 // Items come from Astro.glob('../content/projects/*.mdx')
 const { items, lang = 'en' } = Astro.props as { items: Array<{ url?: string; frontmatter: ProjectFrontmatter }>; lang?: 'en' | 'pt' };
 
+const locale = lang === 'pt' ? 'pt-BR' : 'en-US';
 const formatDate = (d: string | Date | undefined) => {
-  if (!d) return 'Dec 1, 2025';
-  const dt = new Date(d);
+  const dt = d ? new Date(d) : new Date('2025-12-01');
   if (Number.isNaN(dt.getTime())) return String(d);
-  return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return dt.toLocaleDateString(locale, { day: 'numeric', month: 'short', year: 'numeric' });
 };
 ---
 <section id="projects" class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
