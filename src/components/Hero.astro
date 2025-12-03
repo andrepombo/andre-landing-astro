@@ -16,8 +16,8 @@ const { meta, lang = 'en', toggleUrl = '#' } = Astro.props as Props;
 
 <header class="sticky top-0 z-40 backdrop-blur border-b border-slate-200/50 dark:border-slate-800/80 bg-white/60 dark:bg-slate-950/60">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-    <a href="#" class="flex items-center gap-3 group">
-      <img src="/favicon.svg" alt="Logo" class="h-8 w-8 rounded-lg shadow-[0_10px_30px_-10px_rgba(99,102,241,.25)]" />
+    <a href="/" class="flex items-center gap-3 group">
+      <img src="/favicon.svg" alt="Logo" class="h-8 w-8 rounded-lg shadow-[0_10px_30px_-10px_rgba(99,102,241,.25)] transition-transform duration-150 ease-out group-hover:scale-105 group-hover:brightness-110" />
       <span class="tracking-tight font-semibold text-base sm:text-lg">{meta.name}</span>
     </a>
     <nav class="hidden sm:flex items-center gap-1">
