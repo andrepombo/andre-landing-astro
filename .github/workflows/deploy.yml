@@ -34,9 +34,10 @@ jobs:
           # Optional: uncomment if your provider requires a different port
           # port: ${{ secrets.FTP_PORT }}
           local-dir: dist/
-          server-dir: public_html/
+          server-dir: ./
           # Set to true to wipe server-dir before upload (be careful!)
           dangerous-clean-slate: false
+          log-level: verbose
           # Keep certain files on the server (e.g., custom .htaccess)
           exclude: |
             **/.git*
