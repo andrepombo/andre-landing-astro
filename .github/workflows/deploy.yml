@@ -2,7 +2,7 @@ name: Deploy to Hostinger (FTP)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch: {}
 
 jobs:
@@ -33,8 +33,8 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           # Optional: uncomment if your provider requires a different port
           # port: ${{ secrets.FTP_PORT }}
-          local-dir: dist
-          server-dir: public_html
+          local-dir: dist/
+          server-dir: public_html/
           # Set to true to wipe server-dir before upload (be careful!)
           dangerous-clean-slate: false
           # Keep certain files on the server (e.g., custom .htaccess)
