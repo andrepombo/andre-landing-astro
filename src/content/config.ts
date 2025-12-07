@@ -5,9 +5,9 @@ const projects = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    image: z.string().url(),
+    image: z.string(),
     href: z.string().url(),
-    tags: z.array(z.string()),
+    tags: z.array(z.string()).default([]),
     highlight: z.string().optional()
   })
 });
@@ -17,9 +17,9 @@ const articles = defineCollection({
   schema: z.object({
     title: z.string(),
     description: z.string(),
-    image: z.string().url(),
+    image: z.string(),
     href: z.string().url(),
-    tags: z.array(z.string()),
+    tags: z.array(z.string()).default([]),
     date: z.string().or(z.date())
   })
 });
