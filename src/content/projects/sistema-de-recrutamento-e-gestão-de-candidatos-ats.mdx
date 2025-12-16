@@ -1,0 +1,164 @@
+---
+title: Sistema de Recrutamento e Gestão de Candidatos (ATS)
+description: Plataforma completa de recrutamento com cadastro de candidatos,
+  funil visual (Kanban), agendamento de entrevistas com calendário e WhatsApp,
+  analytics, demografia, insights, questionários, scoring e exportações — com
+  backend Django/DRF e frontend React/TypeScript.
+image: /uploads/captura-de-tela-de-2025-12-16-13-38-12.png
+href: https://app1.andrepombo.info/painel/dashboard
+tags:
+  - django
+  - react
+  - typescript
+highlight: ""
+---
+<div style="text-align: justify">
+
+# Sistema de Recrutamento e Gestão de Candidatos
+
+Este é um sistema de recrutamento que desenvolvi para centralizar todo o processo seletivo em um único lugar: cadastro de candidatos, gestão do funil, agendamento de entrevistas, análises e relatórios — tudo em um painel interno para o time de RH.
+
+---
+
+## Visão geral do projeto
+
+O objetivo deste projeto foi sair do fluxo caótico de planilhas e formulários soltos e criar uma solução completa de **ATS (Applicant Tracking System)** sob medida, com:
+
+- Cadastro detalhado de candidatos
+- Funil visual de recrutamento (incluindo visão Kanban)
+- Agendamento e calendário de entrevistas
+- Notificações via WhatsApp (Z-API)
+- Módulos de analytics, demografia e insights
+- Questionários personalizados e gestão de cargos
+- Logs de atividade e exportação de relatórios (PDF/Excel)
+
+---
+
+## Principais funcionalidades
+
+### 1. Cadastro e gestão de candidatos
+
+Implementei um fluxo de candidatura com:
+
+- Dados pessoais (nome, CPF, data de nascimento, contato, endereço)
+- Experiência profissional, formação, habilidades e certificações
+- Links (LinkedIn, portfólio), pretensão salarial, disponibilidade
+- Informações de PCD e atributos relevantes para diversidade
+- Upload de currículo com armazenamento em disco
+
+O backend controla todo o ciclo do candidato com status como:
+
+- `incomplete`, `pending`, `reviewing`, `shortlisted`, `interviewed`, `accepted`, `rejected`
+
+Algumas transições de status são automáticas, de acordo com as ações do RH (por exemplo, agendamento e conclusão de entrevistas).
+
+---
+
+### 2. Painel interno para RH (frontend)
+
+No frontend, desenvolvi um painel em React + TypeScript focado na produtividade do recrutador:
+
+- **Autenticação com JWT** e rotas protegidas  
+- Página de **Dashboard** com:
+  - Lista de candidatos com filtros, busca e ordenação
+  - Diferentes modos de visualização (incluindo **Kanban** por etapa do funil)
+  - Contadores por status (pendentes, em análise, entrevistados, aceitos, etc.)
+
+- **Página de detalhes do candidato**, com:
+  - Perfil completo
+  - Histórico de entrevistas
+  - Notas internas
+
+- **Gestão de cargos (Positions)** para organizar vagas e relacionar candidatos às oportunidades corretas.
+
+---
+
+### 3. Entrevistas, calendário e WhatsApp
+
+Implementei um módulo completo de entrevistas:
+
+- Modelo de entrevista contendo:
+  - Candidato, entrevistador, título, tipo (telefone, vídeo, presencial, técnica, RH)
+  - Data, horário, duração, local/link e descrição
+  - Status: `scheduled`, `completed`, `cancelled`, `rescheduled`, `no_show`
+  - Feedback e rating do entrevistador
+
+- Endpoints de API para:
+  - Listar entrevistas com filtros (candidato, entrevistador, data, tipo, status)
+  - Obter **entrevistas futuras**
+  - Fornecer dados para **visão de calendário** (mês/ano)
+  - Estatísticas gerais de entrevistas
+
+- Integração com **Z-API (WhatsApp)**:
+  - Envio de mensagens automáticas para entrevistas agendadas, reagendadas e canceladas
+  - Tratamento de erros e logs para monitorar o envio
+
+Também conectei o status do candidato à evolução das entrevistas (por exemplo, atualizar para “shortlisted” ou “interviewed” conforme as etapas).
+
+---
+
+### 4. Analytics, Demografia e Insights
+
+Criei páginas específicas para auxiliar o RH a trabalhar com dados:
+
+- **Analytics**  
+  - Funil de conversão entre etapas  
+  - Tempo médio em cada estágio do processo  
+  - Distribuição de pontuações dos candidatos  
+
+- **Demografia**  
+  - Quebra da base de candidatos por gênero, PCD, situação profissional, etc.  
+  - Filtros que podem ser enviados para o Dashboard para analisar segmentos específicos.
+
+- **Insights**  
+  - Visão consolidada de indicadores e comportamentos do funil  
+  - Navegação entre insights e lista de candidatos filtrados.
+
+---
+
+### 5. Questionários e pontuação de candidatos
+
+Implementei dois módulos importantes para enriquecer os dados do processo seletivo:
+
+- **Questionários**
+  - Templates de questionário, perguntas e opções
+  - API para respostas dos candidatos
+  - Endpoint para inicialização dinâmica de formulários
+
+- **Scoring (pontuação)**
+  - Cálculo de score por candidato com base em múltiplos critérios
+  - Reprocessamento em massa das pontuações
+  - Configuração de pesos de scoring via painel, com cache no frontend
+
+---
+
+### 6. Logs, auditoria e relatórios
+
+Para garantir rastreabilidade:
+
+- Criei um módulo de **Activity Log** que registra:
+  - Criação, atualização, reagendamento e cancelamento de entrevistas
+  - Mudanças de status de candidatos e ações importantes do sistema
+
+- Implementei exportações:
+  - **Candidatos** para PDF e Excel
+  - **Relatórios analíticos** (por ano, por exemplo) em PDF e Excel
+
+---
+
+## Stack e decisões técnicas
+
+- **Backend**
+  - Django + Django REST Framework
+  - Autenticação com SimpleJWT (access/refresh tokens)
+  - Permissões padrão para usuários autenticados, com exceções pontuais (ex: endpoints públicos para inicializar e salvar parcialmente formulários)
+
+- **Frontend**
+  - React + TypeScript
+  - Context API para autenticação (`AuthContext`) e sidebar
+  - Axios com interceptors para injetar/renovar tokens JWT
+  - TailwindCSS para estilização e criação rápida de componentes responsivos
+
+---
+
+</div>
