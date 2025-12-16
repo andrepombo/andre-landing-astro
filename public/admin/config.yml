@@ -17,6 +17,7 @@ collections:
     extension: mdx
     slug: "{{slug}}"
     fields:
+      - { label: Slug, name: slug, widget: string }
       - { label: Title, name: title, widget: string }
       - { label: Description, name: description, widget: text }
       - { label: Image URL, name: image, widget: image }
@@ -38,6 +39,7 @@ collections:
     extension: mdx
     slug: "{{slug}}"
     fields:
+      - { label: Slug, name: slug, widget: string }
       - { label: Title, name: title, widget: string }
       - { label: Description, name: description, widget: text }
       - { label: Image URL, name: image, widget: image }
