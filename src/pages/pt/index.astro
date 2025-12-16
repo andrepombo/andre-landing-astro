@@ -5,6 +5,7 @@ import Projects from '../../components/Projects.astro';
 import Articles from '../../components/Articles.astro';
 import Footer from '../../components/Footer.astro';
 import SocialIcons from '../../components/SocialIcons.tsx';
+import { getCollection } from 'astro:content';
 
 const lang: 'en' | 'pt' = 'pt';
 const toggleUrl = '/';
@@ -19,8 +20,19 @@ const meta = {
   links: { github: 'https://github.com/andrepombo', x: 'https://x.com/', linkedin: 'https://www.linkedin.com/', medium: 'https://medium.com/' }
 };
 
-// Temporary: load content by file glob until content collections are wired
-const projectFiles = await Astro.glob('../../content/projects/*.mdx');
+// Load content collections
+const projectCollection = await getCollection('projects');
+const projectFiles = projectCollection.map((project) => ({
+  url: `/pt/projects/${project.slug}`,
+  frontmatter: {
+    title: project.data.title,
+    description: project.data.description,
+    image: project.data.image,
+    href: project.data.href ?? '',
+    tags: project.data.tags,
+    highlight: project.data.highlight
+  }
+}));
 const articleFiles = await Astro.glob('../../content/articles/*.mdx');
 ---
 <Base title="Developer Portfolio" description="Projects and articles" lang={lang}>
