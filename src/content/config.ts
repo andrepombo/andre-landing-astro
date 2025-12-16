@@ -8,7 +8,8 @@ const projects = defineCollection({
     image: z.string(),
     href: z.string().optional(),
     tags: z.array(z.string()).default([]),
-    highlight: z.string().optional()
+    highlight: z.string().optional(),
+    grayscale: z.boolean().optional()
   })
 });
 

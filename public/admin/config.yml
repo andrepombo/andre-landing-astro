@@ -48,6 +48,7 @@ collections:
         name: tags
         widget: list
       - { label: Highlight, name: highlight, widget: string, required: false }
+      - { label: Grayscale (B/W), name: grayscale, widget: boolean, required: false, default: false }
       - label: Body
         name: body
         widget: markdown
