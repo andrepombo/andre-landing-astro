@@ -1,0 +1,159 @@
+---
+slug: app2
+title: Salon Management System
+description: Full-stack salon management system that lets beauty salons manage
+  clients, staff, services, and appointments in one place, with a modern React
+  dashboard talking to a Django REST API.
+image: /uploads/captura-de-tela-de-2025-12-17-10-59-56.png
+href: https://app2.andrepombo.info/demo-login/?redirect=/dashboard
+grayscale: false
+---
+\---
+
+summary: "Full-stack salon management app with React (Vite) frontend and Django REST API backend to manage clients, staff, services, and appointments with conflict prevention and analytics."
+
+tags:
+
+\- React
+
+\- Vite
+
+\- Django
+
+\- REST API
+
+\- CRUD
+
+\- Scheduling
+
+\- Portfolio
+
+cover_image: "/images/projects/salao/cover.jpg"
+
+\---
+
+
+
+\## Overview
+
+
+
+A full-stack salon management system that centralizes daily operations for beauty salons. The React/Vite frontend provides a modern, responsive dashboard integrated with a Django REST API. It supports client, team, services, and appointment management, with conflict prevention, localized validations, health checks, and analytics.
+
+
+
+\## Key Features
+
+
+
+\- \*\*Client Management\*\*  
+
+  Full CRUD with name, email, phone, and address. Brazilian phone validation and formatting.
+
+
+
+\- \*\*Team Management\*\*  
+
+  Manage professionals with contact info and specialties, linked to the services they perform.
+
+
+
+\- \*\*Service Catalog\*\*  
+
+  Create and maintain services with name, description, price, and duration (validated).
+
+
+
+\- \*\*Appointment Scheduling\*\*  
+
+  Book appointments linking clients, professionals, and one or more services. Tracks date/time, total price, notes, and status workflow:
+
+  scheduled, confirmed, in progress, completed, cancelled, no-show.
+
+
+
+\- \*\*Conflict Prevention\*\*  
+
+  Backend prevents double-booking when a professional is already occupied.
+
+
+
+\- \*\*Admin Dashboard UI\*\*  
+
+  Sidebar navigation for Dashboard, Clients, Team, Services, and Appointments. Responsive design with gradients and subtle animations.
+
+
+
+\- \*\*API-First + Docs\*\*  
+
+  Django REST Framework API with Swagger/OpenAPI documentation for clients, team, services, and appointments.
+
+
+
+\- \*\*Localization & Validation\*\*  
+
+  Configured for Brazilian locale (timezone, language) and phone formatting/validation.
+
+
+
+\- \*\*Health Checks & Error Handling\*\*  
+
+  Frontend tests API health, shows live connection status, displays friendly error toasts, and provides retry.
+
+
+
+\- \*\*Analytics\*\*  
+
+  Page view tracking on route changes for usage insights.
+
+
+
+\## Tech Stack
+
+
+
+\- \*\*Frontend\*\*: React 18, Vite, React Router, Axios, CSS3  
+
+\- \*\*Backend\*\*: Django 5, Django REST Framework, drf-yasg (Swagger/OpenAPI), django-cors-headers, python-dotenv  
+
+\- \*\*Database\*\*: SQLite (dev) / PostgreSQL (prod-ready)  
+
+\- \*\*DevOps\*\*: Docker / Docker Compose, environment-based configuration
+
+
+
+\## Notable Endpoints
+
+
+
+\- \`/api/clients/\` — list/create, \`/api/clients/{id}/\` — retrieve/update/delete  
+
+\- \`/api/team/\` — list/create, \`/api/team/{id}/\` — retrieve/update/delete  
+
+\- \`/api/services/\` — list/create, \`/api/services/{id}/\` — retrieve/update/delete  
+
+\- \`/api/appointments/\` — list/create, \`/api/appointments/{id}/\` — retrieve/update/delete  
+
+\- Swagger docs: \`/swagger/\`
+
+
+
+\## Screens / UX
+
+
+
+\- Sidebar-driven dashboard with sections for operational tasks  
+
+\- Responsive layout, clean typography, and status indicators for API connectivity
+
+
+
+\## Notes
+
+
+
+\- CORS configured for SPA development  
+
+\- Environment variables for easy deployments  
+
+\- Optional Docker setup for dev and production
