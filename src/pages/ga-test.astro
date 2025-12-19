@@ -16,7 +16,33 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
     </div>
     <p class="mt-4">Open DevTools → Network → filter by <code>collect</code>. You should see 204 responses to google-analytics.com/g/collect.</p>
   </main>
-
+  <script>
+    {`
+      (function(){
+        // Ensure GA library is present even if layout conditionally skipped it
+        if (typeof window.gtag !== 'function') {
+          try {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function(){ window.dataLayer.push(arguments); };
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}';
+            s.onload = function(){
+              try {
+                console.log('[GA-DIAG] gtag loader loaded');
+                window.gtag('js', new Date());
+                window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', { debug_mode: true });
+              } catch(e) { console.log('[GA-DIAG] onload init error', e); }
+            };
+            document.head.appendChild(s);
+            console.log('[GA-DIAG] injected gtag loader');
+          } catch(e) { console.log('[GA-DIAG] injection error', e); }
+        } else {
+          console.log('[GA-DIAG] gtag already present');
+        }
+      })();
+    `}
+  </script>
   <script>
     {`
       (function(){
