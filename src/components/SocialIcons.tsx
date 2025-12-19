@@ -5,6 +5,12 @@ export default function SocialIcons({ github, linkedin }: { github?: string; lin
   const handleSocialClick = (name: 'Github' | 'LinkedIn') => {
     const map: Record<string, string | undefined> = { Github: github, LinkedIn: linkedin };
     const href = map[name];
+    if (typeof window !== 'undefined' && typeof (window as any).analyticsTrack === 'function') {
+      (window as any).analyticsTrack('social_click', {
+        network: name.toLowerCase(),
+        href,
+      });
+    }
     if (href) window.open(href, '_blank', 'noopener');
   };
   return (

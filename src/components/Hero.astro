@@ -33,7 +33,13 @@ import SocialIcons from './SocialIcons.tsx';
       <div class="flex items-center gap-2 ml-1">
         <SocialIcons client:load github={meta.links?.github} linkedin={meta.links?.linkedin} />
       </div>
-      <a href={toggleUrl} aria-label={lang === 'en' ? 'Switch to Portuguese' : 'Mudar para Inglês'} class="px-3 py-1.5 rounded-full text-xs bg-slate-900 text-white border border-slate-800/80 dark:bg-slate-800 dark:text-slate-50 dark:border-slate-700 inline-flex items-center gap-1.5">
+      <a
+        href={toggleUrl}
+        aria-label={lang === 'en' ? 'Switch to Portuguese' : 'Mudar para Inglês'}
+        class="px-3 py-1.5 rounded-full text-xs bg-slate-900 text-white border border-slate-800/80 dark:bg-slate-800 dark:text-slate-50 dark:border-slate-700 inline-flex items-center gap-1.5"
+        data-analytics-event="language_toggle"
+        data-analytics-params={JSON.stringify({ from: lang, to: lang === 'en' ? 'pt' : 'en' })}
+      >
         {lang === 'en' ? (<>
           <span>PT</span><span>🇧🇷</span>
         </>) : (<>

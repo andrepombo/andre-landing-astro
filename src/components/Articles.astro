@@ -27,7 +27,17 @@ const formatDate = (d: string | Date | undefined) => {
   </div>
   <div class="space-y-4">
     {items.map((a) => (
-      <a href={a.frontmatter.href} target="_blank" class="block p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:border-[--color-accent-300] transition">
+      <a
+        href={a.frontmatter.href}
+        target="_blank"
+        class="block p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:border-[--color-accent-300] transition"
+        data-analytics-event="article_click"
+        data-analytics-params={JSON.stringify({
+          title: a.frontmatter.title,
+          href: a.frontmatter.href,
+          lang,
+        })}
+      >
         <div class="flex items-start gap-4">
           <img src={a.frontmatter.image} alt="" class="h-20 w-28 rounded-lg object-cover border border-slate-200 dark:border-slate-800" />
           <div class="flex-1">
