@@ -28,26 +28,28 @@ const IS_PROD = import.meta.env.PROD;
       :root { --font: Heebo, Helvetica, Arial, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; }
       body { font-family: var(--font); }
     </style>
-    {GA_ID && IS_PROD && (
+    {import.meta.env.PUBLIC_GA_MEASUREMENT_ID && IS_PROD && (
       <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
-        <script is:inline>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);} 
-          window.gtag = gtag;
-          gtag('js', new Date());
-          gtag('config', GA_ID, {
-            anonymize_ip: true,
-            page_path: window.location.pathname,
-            page_location: window.location.href,
-            page_title: document.title,
-            language: document.documentElement.lang || '%LANG%'
-          });
-          window.analyticsTrack = function(eventName, params) {
-            try {
-              gtag('event', eventName, params || {});
-            } catch (e) {}
-          };
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}`}></script>
+        <script>
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);} 
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}', {
+              anonymize_ip: true,
+              page_path: window.location.pathname,
+              page_location: window.location.href,
+              page_title: document.title,
+              language: document.documentElement.lang
+            });
+            window.analyticsTrack = function(eventName, params) {
+              try {
+                gtag('event', eventName, params || {});
+              } catch (e) {}
+            };
+          `}
         </script>
       </>
     )}
@@ -87,7 +89,7 @@ const IS_PROD = import.meta.env.PROD;
           document.documentElement.dataset.theme = mode;
           try { localStorage.setItem('theme', mode); } catch {}
           try {
-            var tracker = (window && window['analyticsTrack']) || null;
+            var tracker = (window && window.analyticsTrack) || null;
             if (typeof tracker === 'function') {
               tracker('theme_toggle', { mode: mode });
             }
