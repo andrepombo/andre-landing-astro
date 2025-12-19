@@ -32,6 +32,7 @@ const GA_ID = 'G-M0VXJ6HXT1';
       window.dataLayer = window.dataLayer || [];
       function gtag(){ dataLayer.push(arguments); }
       window.gtag = window.gtag || gtag;
+      gtag('set', 'transport_type', 'beacon');
       gtag('js', new Date());
       gtag('config', 'G-M0VXJ6HXT1');
       window.analyticsTrack = function(eventName, params) {
@@ -100,7 +101,16 @@ const GA_ID = 'G-M0VXJ6HXT1';
             if (paramsRaw) {
               try { params = JSON.parse(paramsRaw); } catch (e) {}
             }
-            window.analyticsTrack(eventName, params);
+            var delayAttr = el.getAttribute('data-analytics-nav-delay');
+            var href = (el.tagName === 'A' && el.href) ? el.href : null;
+            if (href && delayAttr) {
+              event.preventDefault();
+              window.analyticsTrack(eventName, params);
+              var ms = parseInt(delayAttr, 10) || 150;
+              setTimeout(function(){ window.location.href = href; }, ms);
+            } else {
+              window.analyticsTrack(eventName, params);
+            }
           }, true);
         })();
       `}
