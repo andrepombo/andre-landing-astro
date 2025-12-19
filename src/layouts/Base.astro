@@ -8,7 +8,7 @@ export interface Props {
 const { title = 'Developer Portfolio', description = 'Projects and articles', lang = 'en' } = Astro.props as Props;
 const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
 const IS_PROD = import.meta.env.PROD;
-const ENABLE_GA = GA_ID && (IS_PROD || import.meta.env.PUBLIC_ENABLE_GA_IN_DEV === 'true');
+const ENABLE_GA = GA_ID && IS_PROD;
 ---
 <html lang={lang} class="scroll-smooth">
   <head>
@@ -35,28 +35,14 @@ const ENABLE_GA = GA_ID && (IS_PROD || import.meta.env.PUBLIC_ENABLE_GA_IN_DEV =
         <script>
           {`
             window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);} 
-            window.gtag = gtag;
-            gtag('js', new Date());
-            gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}', {
-              anonymize_ip: true,
-              page_path: window.location.pathname,
-              page_location: window.location.href,
-              page_title: document.title,
-              language: document.documentElement.lang,
-              send_page_view: false,
-              debug_mode: ${import.meta.env.PROD ? 'false' : 'true'}
-            });
-            gtag('event', 'page_view', {
-              page_title: document.title,
-              page_location: window.location.href,
-              page_path: window.location.pathname
-            });
+            window.gtag = window.gtag || function() {
+              window.dataLayer.push(arguments);
+            };
+            window.gtag('js', new Date());
+            window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}');
             window.analyticsTrack = function(eventName, params) {
               try {
-                var p = params || {};
-                if (${import.meta.env.PROD ? 'false' : 'true'}) { p['debug_mode'] = true; }
-                gtag('event', eventName, p);
+                window.gtag('event', eventName, params || {});
               } catch (e) {}
             };
           `}
