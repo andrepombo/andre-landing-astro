@@ -1,0 +1,64 @@
+---
+import Base from "../layouts/Base.astro";
+const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+---
+<Base title="GA Diagnostics" description="Diagnostics page for Google Analytics">
+  <main class="mx-auto max-w-3xl p-6 prose dark:prose-invert">
+    <h1>GA Diagnostics</h1>
+    <p>Use this page to verify GA beacons and DebugView.</p>
+    <ul>
+      <li><strong>Measurement ID</strong>: {GA_ID ?? 'undefined'}</li>
+      <li><strong>Environment</strong>: {import.meta.env.PROD ? 'production' : 'development'}</li>
+    </ul>
+    <div class="not-prose mt-4 flex gap-3">
+      <button id="send-test-event" class="rounded border px-3 py-2">Send test event</button>
+      <button id="send-config" class="rounded border px-3 py-2">Send config (debug_mode)</button>
+    </div>
+    <p class="mt-4">Open DevTools → Network → filter by <code>collect</code>. You should see 204 responses to google-analytics.com/g/collect.</p>
+  </main>
+
+  <script>
+    {`
+      (function(){
+        function log(){ try { console.log.apply(console, arguments); } catch(_) {} }
+        function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+        ready(function(){
+          log('[GA-DIAG] GA_ID:', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', 'env:', ${import.meta.env.PROD ? `'prod'` : `'dev'`});
+          var hasGtag = typeof window.gtag === 'function';
+          log('[GA-DIAG] window.gtag available:', hasGtag);
+          log('[GA-DIAG] dataLayer length:', Array.isArray(window.dataLayer) ? window.dataLayer.length : 'no dataLayer');
+          if (typeof window.analyticsTrack === 'function') {
+            log('[GA-DIAG] analyticsTrack available: true');
+            try { window.analyticsTrack('diagnostic_page_open', { debug_mode: true, ts: Date.now() }); } catch(e) {}
+          } else if (hasGtag) {
+            try {
+              window.gtag('event', 'diagnostic_page_open', { debug_mode: true, ts: Date.now() });
+              log('[GA-DIAG] fired diagnostic_page_open');
+            } catch(e) { log('[GA-DIAG] gtag event error', e); }
+          }
+
+          var btn = document.getElementById('send-test-event');
+          if (btn) btn.addEventListener('click', function(){
+            var payload = { debug_mode: true, ts: Date.now(), source: 'button' };
+            if (typeof window.analyticsTrack === 'function') {
+              window.analyticsTrack('diagnostic_click', payload);
+            } else if (typeof window.gtag === 'function') {
+              window.gtag('event', 'diagnostic_click', payload);
+            }
+            log('[GA-DIAG] diagnostic_click sent', payload);
+          });
+
+          var btnCfg = document.getElementById('send-config');
+          if (btnCfg && typeof window.gtag === 'function') {
+            btnCfg.addEventListener('click', function(){
+              try {
+                window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', { debug_mode: true });
+                log('[GA-DIAG] gtag config resent with debug_mode');
+              } catch(e) { log('[GA-DIAG] gtag config error', e); }
+            });
+          }
+        });
+      })();
+    `}
+  </script>
+</Base>
