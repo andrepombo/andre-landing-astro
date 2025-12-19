@@ -7,8 +7,6 @@ export interface Props {
 }
 const { title = 'Developer Portfolio', description = 'Projects and articles', lang = 'en' } = Astro.props as Props;
 const GA_ID = 'G-M0VXJ6HXT1';
-const IS_PROD = import.meta.env.PROD;
-const ENABLE_GA = GA_ID && IS_PROD;
 ---
 <html lang={lang} class="scroll-smooth">
   <head>
@@ -29,26 +27,22 @@ const ENABLE_GA = GA_ID && IS_PROD;
       :root { --font: Heebo, Helvetica, Arial, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto; }
       body { font-family: var(--font); }
     </style>
-    {ENABLE_GA && (
-      <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
-        <script>
-          {`
-            window.dataLayer = window.dataLayer || [];
-            window.gtag = window.gtag || function() {
-              window.dataLayer.push(arguments);
-            };
-            window.gtag('js', new Date());
-            window.gtag('config', 'G-M0VXJ6HXT1');
-            window.analyticsTrack = function(eventName, params) {
-              try {
-                window.gtag('event', eventName, params || {});
-              } catch (e) {}
-            };
-          `}
-        </script>
-      </>
-    )}
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+    <script>
+      {`
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function() {
+          window.dataLayer.push(arguments);
+        };
+        window.gtag('js', new Date());
+        window.gtag('config', 'G-M0VXJ6HXT1');
+        window.analyticsTrack = function(eventName, params) {
+          try {
+            window.gtag('event', eventName, params || {});
+          } catch (e) {}
+        };
+      `}
+    </script>
     <script>
       // Initialize theme early (avoids flash)
       (() => {
