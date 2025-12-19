@@ -6,7 +6,7 @@ export interface Props {
   lang?: 'en' | 'pt';
 }
 const { title = 'Developer Portfolio', description = 'Projects and articles', lang = 'en' } = Astro.props as Props;
-const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const GA_ID = 'G-G3REX68NDH';
 const IS_PROD = import.meta.env.PROD;
 const ENABLE_GA = GA_ID && IS_PROD;
 ---
@@ -39,7 +39,7 @@ const ENABLE_GA = GA_ID && IS_PROD;
               window.dataLayer.push(arguments);
             };
             window.gtag('js', new Date());
-            window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID}');
+            window.gtag('config', 'G-G3REX68NDH');
             window.analyticsTrack = function(eventName, params) {
               try {
                 window.gtag('event', eventName, params || {});

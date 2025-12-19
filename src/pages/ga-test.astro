@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
-const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const GA_ID = 'G-G3REX68NDH';
+const ENV = import.meta.env.PROD ? 'prod' : 'dev';
 ---
 <Base title="GA Diagnostics" description="Diagnostics page for Google Analytics">
   <main class="mx-auto max-w-3xl p-6 prose dark:prose-invert">
@@ -25,12 +26,12 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
             window.gtag = function(){ window.dataLayer.push(arguments); };
             var s = document.createElement('script');
             s.async = true;
-            s.src = 'https://www.googletagmanager.com/gtag/js?id=${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}';
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=${GA_ID || ''}';
             s.onload = function(){
               try {
                 console.log('[GA-DIAG] gtag loader loaded');
                 window.gtag('js', new Date());
-                window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', { debug_mode: true });
+                window.gtag('config', '${GA_ID || ''}', { debug_mode: true });
               } catch(e) { console.log('[GA-DIAG] onload init error', e); }
             };
             document.head.appendChild(s);
@@ -60,7 +61,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
         window.GA_DIAG_onConfigClick = function(){
           try {
             if (typeof window.gtag === 'function') {
-              window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', { debug_mode: true });
+              window.gtag('config', '${GA_ID || ''}', { debug_mode: true });
               console.log('[GA-DIAG] inline config resent');
             }
           } catch(e) { console.log('[GA-DIAG] inline config error', e); }
@@ -68,7 +69,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
         function log(){ try { console.log.apply(console, arguments); } catch(_) {} }
         function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
         ready(function(){
-          log('[GA-DIAG] GA_ID:', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', 'env:', ${import.meta.env.PROD ? `'prod'` : `'dev'`});
+          log('[GA-DIAG] GA_ID:', '${GA_ID || ''}', 'env:', '${ENV}');
           var hasGtag = typeof window.gtag === 'function';
           log('[GA-DIAG] window.gtag available:', hasGtag);
           log('[GA-DIAG] dataLayer length:', Array.isArray(window.dataLayer) ? window.dataLayer.length : 'no dataLayer');
@@ -97,7 +98,7 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
           if (btnCfg && typeof window.gtag === 'function') {
             btnCfg.addEventListener('click', function(){
               try {
-                window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', { debug_mode: true });
+                window.gtag('config', '${GA_ID || ''}', { debug_mode: true });
                 log('[GA-DIAG] gtag config resent with debug_mode');
               } catch(e) { log('[GA-DIAG] gtag config error', e); }
             });
