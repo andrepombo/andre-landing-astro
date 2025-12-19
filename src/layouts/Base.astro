@@ -85,35 +85,43 @@ const GA_ID = 'G-M0VXJ6HXT1';
         });
       })();
     </script>
-    <script>
-      {`
-        (function(){
-          window.analyticsTrack = window.analyticsTrack || function(){};
-          document.addEventListener('click', function(event) {
-            var target = event.target;
-            if (!target || !(target instanceof Element)) return;
-            var el = target.closest('[data-analytics-event]');
-            if (!el) return;
-            var eventName = el.getAttribute('data-analytics-event');
-            if (!eventName || typeof window.analyticsTrack !== 'function') return;
-            var paramsRaw = el.getAttribute('data-analytics-params');
-            var params = {};
-            if (paramsRaw) {
-              try { params = JSON.parse(paramsRaw); } catch (e) {}
-            }
-            var delayAttr = el.getAttribute('data-analytics-nav-delay');
-            var href = (el.tagName === 'A' && el.href) ? el.href : null;
-            if (href && delayAttr) {
-              event.preventDefault();
-              window.analyticsTrack(eventName, params);
-              var ms = parseInt(delayAttr, 10) || 150;
-              setTimeout(function(){ window.location.href = href; }, ms);
-            } else {
-              window.analyticsTrack(eventName, params);
-            }
-          }, true);
-        })();
-      `}
+    <script is:inline>
+      (function(){
+        window.analyticsTrack = window.analyticsTrack || function(){};
+        document.addEventListener('click', function(event) {
+          var target = event.target;
+          if (!target || !(target instanceof Element)) return;
+          var el = target.closest('[data-analytics-event]');
+          if (!el) return;
+          var eventName = el.getAttribute('data-analytics-event');
+          if (!eventName) return;
+          var paramsRaw = el.getAttribute('data-analytics-params');
+          var params = {};
+          if (paramsRaw) { try { params = JSON.parse(paramsRaw); } catch (e) {}
+          }
+          var href = (el.tagName === 'A' && el.href) ? el.href : null;
+          if (href) {
+            event.preventDefault();
+            var navigated = false;
+            var navigate = function(){ if (!navigated) { navigated = true; window.location.href = href; } };
+            try {
+              if (typeof window.gtag === 'function') {
+                var payload = params || {};
+                payload.event_callback = navigate;
+                window.gtag('event', eventName, payload);
+                setTimeout(navigate, 600);
+              } else if (typeof window.analyticsTrack === 'function') {
+                window.analyticsTrack(eventName, params);
+                setTimeout(navigate, 200);
+              } else {
+                navigate();
+              }
+            } catch (e) { setTimeout(navigate, 200); }
+          } else {
+            try { window.analyticsTrack(eventName, params); } catch (e) {}
+          }
+        }, true);
+      })();
     </script>
   </body>
 </html>
