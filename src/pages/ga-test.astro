@@ -11,8 +11,8 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
       <li><strong>Environment</strong>: {import.meta.env.PROD ? 'production' : 'development'}</li>
     </ul>
     <div class="not-prose mt-4 flex gap-3">
-      <button id="send-test-event" class="rounded border px-3 py-2">Send test event</button>
-      <button id="send-config" class="rounded border px-3 py-2">Send config (debug_mode)</button>
+      <button id="send-test-event" type="button" class="rounded border px-3 py-2 cursor-pointer" onclick="GA_DIAG_onTestClick()">Send test event</button>
+      <button id="send-config" type="button" class="rounded border px-3 py-2 cursor-pointer" onclick="GA_DIAG_onConfigClick()">Send config (debug_mode)</button>
     </div>
     <p class="mt-4">Open DevTools → Network → filter by <code>collect</code>. You should see 204 responses to google-analytics.com/g/collect.</p>
   </main>
@@ -46,6 +46,26 @@ const GA_ID = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
   <script>
     {`
       (function(){
+        // Expose click handlers globally for inline onclick
+        window.GA_DIAG_onTestClick = function(){
+          try {
+            var payload = { debug_mode: true, ts: Date.now(), source: 'inline' };
+            if (typeof window.analyticsTrack === 'function') {
+              window.analyticsTrack('diagnostic_click_inline', payload);
+            } else if (typeof window.gtag === 'function') {
+              window.gtag('event', 'diagnostic_click_inline', payload);
+            }
+            console.log('[GA-DIAG] inline click fired', payload);
+          } catch(e) { console.log('[GA-DIAG] inline click error', e); }
+        };
+        window.GA_DIAG_onConfigClick = function(){
+          try {
+            if (typeof window.gtag === 'function') {
+              window.gtag('config', '${import.meta.env.PUBLIC_GA_MEASUREMENT_ID || ''}', { debug_mode: true });
+              console.log('[GA-DIAG] inline config resent');
+            }
+          } catch(e) { console.log('[GA-DIAG] inline config error', e); }
+        };
         function log(){ try { console.log.apply(console, arguments); } catch(_) {} }
         function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
         ready(function(){
