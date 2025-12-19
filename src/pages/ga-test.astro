@@ -69,7 +69,7 @@ const ENV = import.meta.env.PROD ? 'prod' : 'dev';
         function log(){ try { console.log.apply(console, arguments); } catch(_) {} }
         function ready(fn){ if (document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
         ready(function(){
-          log('[GA-DIAG] GA_ID:', 'G-M0VXJ6HXT1', 'env:', '${ENV}');
+          log('[GA-DIAG] GA_ID:', 'G-M0VXJ6HXT1');
           var hasGtag = typeof window.gtag === 'function';
           log('[GA-DIAG] window.gtag available:', hasGtag);
           log('[GA-DIAG] dataLayer length:', Array.isArray(window.dataLayer) ? window.dataLayer.length : 'no dataLayer');
