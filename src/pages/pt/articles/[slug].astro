@@ -72,26 +72,5 @@ const data = article.data;
       
     </article>
   </main>
-  <script is:inline>
-    {data.href ? `
-      (function(){
-        var dest = ${JSON.stringify(data.href)};
-        var navigated = false;
-        function go(){ if(!navigated){ navigated = true; window.location.href = dest; } }
-        setTimeout(function(){
-          try{
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', 'article_redirect', { destination: dest, event_callback: go });
-              setTimeout(go, 700);
-            } else if (typeof window.analyticsTrack === 'function') {
-              window.analyticsTrack('article_redirect', { destination: dest });
-              setTimeout(go, 300);
-            } else {
-              go();
-            }
-          } catch(e){ go(); }
-        }, 200);
-      })();
-    ` : ''}
-  </script>
+  
 </Base>
