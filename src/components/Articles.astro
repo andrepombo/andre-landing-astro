@@ -28,13 +28,13 @@ const formatDate = (d: string | Date | undefined) => {
   <div class="space-y-4">
     {items.map((a) => (
       <a
-        href={a.frontmatter.href}
-        target="_blank"
+        href={a.url ?? a.frontmatter.href}
+        target={a.url ? undefined : '_blank'}
         class="block p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 hover:border-[--color-accent-300] transition"
         data-analytics-event="article_click"
         data-analytics-params={JSON.stringify({
           title: a.frontmatter.title,
-          href: a.frontmatter.href,
+          href: a.url ?? a.frontmatter.href,
           lang,
         })}
       >

@@ -102,8 +102,24 @@ const GA_ID = 'G-M0VXJ6HXT1';
           var href = (el.tagName === 'A' && el.href) ? el.href : null;
           if (href) {
             event.preventDefault();
+            var targetAttr = el.getAttribute('target');
+            var openInNew = targetAttr === '_blank';
+            var preWin = null;
+            if (openInNew) {
+              try { preWin = window.open('', '_blank'); } catch (_) {}
+            }
             var navigated = false;
-            var navigate = function(){ if (!navigated) { navigated = true; window.location.href = href; } };
+            var navigate = function(){
+              if (!navigated) {
+                navigated = true;
+                if (openInNew) {
+                  try { if (preWin) { preWin.location.href = href; } else { window.open(href, '_blank'); } }
+                  catch (_) { window.open(href, '_blank'); }
+                } else {
+                  window.location.href = href;
+                }
+              }
+            };
             try {
               if (typeof window.gtag === 'function') {
                 var payload = params || {};

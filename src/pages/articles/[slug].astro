@@ -1,0 +1,97 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article }
+  }));
+}
+
+const { article } = Astro.props as {
+  article: import('astro:content').CollectionEntry<'articles'>;
+};
+
+const { Content } = await article.render();
+const data = article.data;
+---
+<Base title={data.title} description={data.description}>
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+    <a
+      href="/"
+      class="fixed top-5 left-4 sm:top-6 sm:left-6 inline-flex items-center text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur px-3 py-2 rounded-full border border-slate-200 dark:border-slate-800 shadow-sm"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+      Back to home
+    </a>
+
+    <article class="space-y-6">
+      <header class="space-y-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Article</p>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">{data.title}</h1>
+        <p class="text-base text-slate-600 dark:text-slate-300">{data.description}</p>
+      </header>
+
+      {data.href && (
+        <div class="mt-2 flex justify-start">
+          <a
+            href={data.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-slate-50 hover:bg-slate-800 dark:bg-slate-50 dark:text-slate-900 dark:hover:bg-slate-200 text-sm font-medium transition"
+          >
+            <span>Read full article</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </a>
+        </div>
+      )}
+
+      {data.image && (
+        <div class="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
+          <img
+            src={data.image}
+            alt={data.title}
+            class="w-full h-auto object-cover"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
+
+      <section class="prose prose-slate dark:prose-invert max-w-none mt-6">
+        <Content />
+      </section>
+      
+    </article>
+  </main>
+  <script is:inline>
+    {data.href ? `
+      (function(){
+        var dest = ${JSON.stringify(data.href)};
+        var navigated = false;
+        function go(){ if(!navigated){ navigated = true; window.location.href = dest; } }
+        setTimeout(function(){
+          try{
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'article_redirect', { destination: dest, event_callback: go });
+              setTimeout(go, 700);
+            } else if (typeof window.analyticsTrack === 'function') {
+              window.analyticsTrack('article_redirect', { destination: dest });
+              setTimeout(go, 300);
+            } else {
+              go();
+            }
+          } catch(e){ go(); }
+        }, 200);
+      })();
+    ` : ''}
+  </script>
+</Base>

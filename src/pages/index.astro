@@ -22,7 +22,6 @@ const meta = {
   links: { github: 'https://github.com/andrepombo', x: 'https://x.com/', linkedin: 'https://www.linkedin.com/in/andrepombo/', medium: 'https://medium.com/' }
 };
 
-// Temporary: load content by file glob until content collections are wired
 const projectCollection = await getCollection('projects');
 const projectFiles = projectCollection.map((project) => ({
   url: `/projects/${project.slug}`,
@@ -35,7 +34,18 @@ const projectFiles = projectCollection.map((project) => ({
     highlight: project.data.highlight
   }
 }));
-const articleFiles = await Astro.glob('../content/articles/*.mdx');
+const articleCollection = await getCollection('articles');
+const articleFiles = articleCollection.map((article) => ({
+  url: `/articles/${article.slug}`,
+  frontmatter: {
+    title: article.data.title,
+    description: article.data.description,
+    image: article.data.image,
+    href: article.data.href ?? '',
+    tags: article.data.tags,
+    date: article.data.date
+  }
+}));
 ---
 <Base title="Developer Portfolio" description="Projects and articles" lang={lang}>
   <Hero meta={meta} lang={lang} toggleUrl={toggleUrl} />
