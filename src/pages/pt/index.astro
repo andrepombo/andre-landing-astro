@@ -21,9 +21,9 @@ const meta = {
 };
 
 // Load content collections
-const projectCollection = await getCollection('projects');
+const projectCollection = (await getCollection('projects')).filter((p) => p.data.lang === 'pt');
 const projectFiles = projectCollection.map((project) => ({
-  url: `/pt/projects/${project.slug}`,
+  url: `/pt/projects/${project.data.slug}`,
   frontmatter: {
     title: project.data.title,
     description: project.data.description,
