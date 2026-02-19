@@ -23,7 +23,7 @@ const title = data.title_pt ?? data.title;
 const description = data.description_pt ?? data.description;
 ---
 <Base title={title} description={description} lang={lang}>
-  <style>
+  <style is:global>
     [data-lang="en"] { display: none; }
     [data-lang="pt"] { display: block; }
   </style>

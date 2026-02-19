@@ -21,7 +21,7 @@ const lang = 'en';
 const toggleUrl = `/pt/projects/${project.slug}`;
 ---
 <Base title={data.title} description={data.description} lang={lang}>
-  <style>
+  <style is:global>
     [data-lang="pt"] { display: none; }
     [data-lang="en"] { display: block; }
   </style>
