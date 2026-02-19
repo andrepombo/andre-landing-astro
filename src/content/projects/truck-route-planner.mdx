@@ -1,0 +1,180 @@
+---
+slug: app3
+title: Truck Route Planner
+description: Full-stack route planning tool for US truck drivers that calculates
+  the optimal fuel stop sequence along any interstate trip, minimizing total
+  fuel cost based on real diesel prices, truck range, and MPG — built with a
+  Django REST API and a React/TypeScript frontend with an interactive Leaflet map.
+title_pt: Planejador de Rotas para Caminhões
+description_pt: Ferramenta completa de planejamento de rotas para caminhoneiros
+  nos EUA que calcula a sequência ideal de paradas para abastecimento ao longo
+  de qualquer viagem, minimizando o custo total de combustível com base em
+  preços reais de diesel, autonomia do caminhão e consumo (MPG) — com backend
+  Django REST e frontend React/TypeScript com mapa interativo Leaflet.
+image: /uploads/_b3bedc39-1396-44ef-9709-f0207d94d517.jpeg
+tags:
+  - Django
+  - React
+  - TypeScript
+  - Leaflet
+  - Docker
+grayscale: false
+---
+
+<div data-lang="en">
+
+## Overview
+
+A full-stack route planning tool built for US truck drivers. Given a start and finish city, the system geocodes both locations, fetches the driving route via the Geoapify Routing API, and then runs a fuel-stop optimizer that selects the cheapest diesel stations along the corridor — respecting the truck's maximum range and MPG — to minimize the total trip fuel cost.
+
+The React/TypeScript frontend renders an interactive Leaflet map that progressively updates: the base A→B route appears first, then the detour polyline through the chosen fuel stops loads in the background without blocking the UI.
+
+---
+
+## Key Features
+
+- **Optimal Fuel Stop Planning**  
+  Greedy planner that selects the cheapest reachable diesel stations along the route corridor (within ~5 miles of the polyline), always ensuring the truck can reach the next stop or destination without running dry.
+
+- **Real Diesel Price Data**  
+  Fuel prices are loaded from a real-world CSV dataset of US diesel stations, imported into a PostgreSQL/SQLite database with spatial indexes for fast bounding-box queries.
+
+- **Configurable Truck Parameters**  
+  Supports custom MPG and maximum tank range (miles). The "start with empty tank" option triggers a pre-trip stop near the origin before hitting the highway.
+
+- **Interactive Map (Leaflet)**  
+  Displays the base route, the detour polyline through fuel stops, and custom markers for origin, destination, and each fuel station (with popup details: name, address, price, gallons purchased, cost).
+
+- **City Autocomplete**  
+  Debounced autocomplete input powered by the Geoapify Places API for fast city/state lookup.
+
+- **Progressive Loading**  
+  The base route and stop list render immediately after the first API response; the detour polyline through all stops is fetched asynchronously and updates the map without re-rendering the whole UI.
+
+- **Trip Summary Panel**  
+  Sidebar shows total distance (including detours), estimated duration, number of stops, and total estimated fuel cost.
+
+- **Detour Calculation**  
+  Backend computes the extra miles added by each station detour using polyline projection, and aggregates total detour miles in the trip summary.
+
+- **Health Check Endpoint**  
+  `/api/health/` verifies the fuel price dataset is loaded and returns the station count, used by the frontend to confirm API connectivity.
+
+- **Docker Support**  
+  Both services ship with Dockerfiles and a `docker-compose.yml` for one-command local setup.
+
+---
+
+## Tech Stack
+
+- **Frontend**: React 18, TypeScript, Vite, React-Leaflet, TailwindCSS  
+- **Backend**: Django 5, Django REST Framework, python-dotenv, Whitenoise, Gunicorn  
+- **Database**: SQLite (dev) / PostgreSQL (prod-ready via `psycopg` + `dj-database-url`)  
+- **External APIs**: Geoapify (geocoding, routing, reverse geocoding)  
+- **Storage**: AWS S3 via `django-storages` + `boto3` (for static/media in production)  
+- **DevOps**: Docker / Docker Compose, GitHub Actions
+
+---
+
+## Notable Endpoints
+
+- `POST /api/plan-route/` — main planning endpoint: geocodes start/finish, fetches route, runs fuel optimizer, returns stops + trip summary + route geometry  
+- `POST /api/route-through-stops/` — lightweight endpoint that returns the Geoapify multi-waypoint route geometry through a given list of coordinates (used by the frontend for the detour polyline)  
+- `GET /api/health/` — dataset health check
+
+---
+
+## Algorithm Highlights
+
+- **Bounding-box pre-filter**: only stations inside the route's bounding box (+ margin) are loaded from the DB, avoiding full-table scans.  
+- **Polyline downsampling**: the route polyline is downsampled to ≤ 400 vertices before station projection to keep the O(stations × vertices) cost manageable.  
+- **Bisect-based range lookup**: candidate stations are sorted by mile-marker; `bisect` is used for O(log N) range queries in the planning loop.  
+- **Minimum purchase threshold**: configurable `MIN_GALLONS_PER_STOP` prevents tiny top-up stops; the planner delays stopping until a meaningful fill-up is needed.  
+- **Trip cost allocation**: if more fuel is purchased than burned (leftover in tank), only the consumed share of the purchase cost is attributed to the current trip.
+
+<div style="margin-top: 2rem; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background: #f8fafc; text-align: center; font-size: 0.8rem; color: #64748b;">
+  🇧🇷 Esta página também está disponível em <a href="/pt/projects/app3" style="color: #3b82f6; text-decoration: underline;">Português</a>
+</div>
+
+</div>
+
+{/* ─────────────────────────────────────────────────────────────────────────
+    🇧🇷  PORTUGUÊS
+    ───────────────────────────────────────────────────────────────────────── */}
+
+<div data-lang="pt">
+
+## Visão Geral
+
+Ferramenta completa de planejamento de rotas para caminhoneiros nos EUA. Dado um ponto de partida e um destino, o sistema geocodifica ambos os locais, busca a rota de direção via API Geoapify Routing e executa um otimizador de paradas de abastecimento que seleciona os postos de diesel mais baratos ao longo do corredor da rota — respeitando a autonomia máxima e o consumo (MPG) do caminhão — para minimizar o custo total de combustível da viagem.
+
+O frontend em React/TypeScript renderiza um mapa interativo com Leaflet que se atualiza progressivamente: a rota base A→B aparece primeiro, e depois a polilinha de desvio pelos postos escolhidos é carregada em segundo plano sem bloquear a interface.
+
+---
+
+## Principais Funcionalidades
+
+- **Planejamento Otimizado de Paradas**  
+  Planejador greedy que seleciona os postos de diesel mais baratos e acessíveis ao longo do corredor da rota (dentro de ~5 milhas da polilinha), garantindo sempre que o caminhão consiga chegar à próxima parada ou ao destino sem ficar sem combustível.
+
+- **Dados Reais de Preço de Diesel**  
+  Os preços de combustível são carregados a partir de um dataset CSV real de postos de diesel nos EUA, importado para um banco PostgreSQL/SQLite com índices espaciais para consultas rápidas por bounding box.
+
+- **Parâmetros Configuráveis do Caminhão**  
+  Suporta MPG e autonomia máxima (milhas) personalizados. A opção "iniciar com tanque vazio" aciona uma parada pré-viagem próxima à origem antes de entrar na rodovia.
+
+- **Mapa Interativo (Leaflet)**  
+  Exibe a rota base, a polilinha de desvio pelos postos de abastecimento e marcadores personalizados para origem, destino e cada posto (com popup de detalhes: nome, endereço, preço, litros comprados, custo).
+
+- **Autocomplete de Cidades**  
+  Input com autocomplete e debounce alimentado pela API Geoapify Places para busca rápida de cidades e estados.
+
+- **Carregamento Progressivo**  
+  A rota base e a lista de paradas são exibidas imediatamente após a primeira resposta da API; a polilinha de desvio por todos os postos é buscada de forma assíncrona e atualiza o mapa sem re-renderizar toda a interface.
+
+- **Painel de Resumo da Viagem**  
+  A barra lateral exibe a distância total (incluindo desvios), duração estimada, número de paradas e custo total estimado de combustível.
+
+- **Cálculo de Desvio**  
+  O backend calcula as milhas extras adicionadas pelo desvio de cada posto usando projeção de polilinha e agrega o total de milhas de desvio no resumo da viagem.
+
+- **Endpoint de Health Check**  
+  `/api/health/` verifica se o dataset de preços está carregado e retorna a contagem de postos, usado pelo frontend para confirmar a conectividade com a API.
+
+- **Suporte a Docker**  
+  Ambos os serviços incluem Dockerfiles e um `docker-compose.yml` para setup local com um único comando.
+
+---
+
+## Stack Tecnológica
+
+- **Frontend**: React 18, TypeScript, Vite, React-Leaflet, TailwindCSS  
+- **Backend**: Django 5, Django REST Framework, python-dotenv, Whitenoise, Gunicorn  
+- **Banco de Dados**: SQLite (dev) / PostgreSQL (pronto para produção via `psycopg` + `dj-database-url`)  
+- **APIs Externas**: Geoapify (geocodificação, roteamento, geocodificação reversa)  
+- **Armazenamento**: AWS S3 via `django-storages` + `boto3` (para estáticos/mídia em produção)  
+- **DevOps**: Docker / Docker Compose, GitHub Actions
+
+---
+
+## Endpoints Principais
+
+- `POST /api/plan-route/` — endpoint principal: geocodifica origem/destino, busca rota, executa o otimizador de combustível e retorna paradas + resumo da viagem + geometria da rota  
+- `POST /api/route-through-stops/` — endpoint leve que retorna a geometria da rota Geoapify com múltiplos waypoints (usado pelo frontend para a polilinha de desvio)  
+- `GET /api/health/` — verificação de saúde do dataset
+
+---
+
+## Destaques do Algoritmo
+
+- **Pré-filtro por bounding box**: apenas os postos dentro do bounding box da rota (+ margem) são carregados do banco, evitando varreduras completas na tabela.  
+- **Downsampling da polilinha**: a polilinha da rota é reduzida para ≤ 400 vértices antes da projeção dos postos, mantendo o custo O(postos × vértices) gerenciável.  
+- **Busca por intervalo com bisect**: os postos candidatos são ordenados por marco de milha; `bisect` é usado para consultas de intervalo em O(log N) no loop de planejamento.  
+- **Limite mínimo de compra**: o `MIN_GALLONS_PER_STOP` configurável evita paradas de abastecimento mínimo; o planejador adia a parada até que um reabastecimento significativo seja necessário.  
+- **Alocação de custo da viagem**: se mais combustível for comprado do que consumido (sobra no tanque), apenas a parcela consumida do custo de compra é atribuída à viagem atual.
+
+<div style="margin-top: 2rem; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; border-radius: 0.5rem; background: #f8fafc; text-align: center; font-size: 0.8rem; color: #64748b;">
+  🇺🇸 This page is also available in <a href="/projects/app3" style="color: #3b82f6; text-decoration: underline;">English</a>
+</div>
+
+</div>
