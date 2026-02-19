@@ -24,7 +24,7 @@ const meta = {
 
 const projectCollection = (await getCollection('projects')).filter((p) => p.data.lang === 'en');
 const projectFiles = projectCollection.map((project) => ({
-  url: `/projects/${project.data.slug}`,
+  url: `/projects/${project.data.ref}`,
   frontmatter: {
     title: project.data.title,
     description: project.data.description,

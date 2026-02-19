@@ -6,7 +6,7 @@ export async function getStaticPaths() {
   const projects = (await getCollection('projects')).filter((p) => p.data.lang === 'en');
 
   return projects.map((project) => ({
-    params: { slug: project.data.slug },
+    params: { slug: project.data.ref },
     props: { project }
   }));
 }
@@ -18,8 +18,8 @@ const { project } = Astro.props as {
 const { Content } = await project.render();
 const data = project.data;
 const allProjects = await getCollection('projects');
-const hasPt = allProjects.some((p) => p.data.slug === data.slug && p.data.lang === 'pt');
-const toggleUrl = hasPt ? `/pt/projects/${data.slug}` : undefined;
+const hasPt = allProjects.some((p) => p.data.ref === data.ref && p.data.lang === 'pt');
+const toggleUrl = hasPt ? `/pt/projects/${data.ref}` : undefined;
 ---
 <Base title={data.title} description={data.description}>
   <main class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
