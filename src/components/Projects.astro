@@ -2,6 +2,8 @@
 export interface ProjectFrontmatter {
   title: string;
   description: string;
+  title_pt?: string;
+  description_pt?: string;
   image: string;
   href: string;
   tags: string[];
@@ -54,9 +56,9 @@ const formatDate = (d: string | Date | undefined) => {
         </div>
         <div class="p-4 space-y-2">
           <div class="flex items-center gap-3">
-            <h3 class="font-semibold">{p.frontmatter.title}</h3>
+            <h3 class="font-semibold">{lang === 'pt' ? (p.frontmatter.title_pt ?? p.frontmatter.title) : p.frontmatter.title}</h3>
           </div>
-          <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{p.frontmatter.description}</p>
+          <p class="text-sm text-slate-600 dark:text-slate-300 line-clamp-2">{lang === 'pt' ? (p.frontmatter.description_pt ?? p.frontmatter.description) : p.frontmatter.description}</p>
           <div class="flex flex-wrap gap-2 pt-1">
             {(p.frontmatter.tags ?? []).map((t) => (
               <span class="text-xs px-2.5 py-1 rounded-full bg-slate-200 text-slate-800 border border-slate-300 dark:bg-slate-700 dark:text-slate-100 dark:border-slate-600">

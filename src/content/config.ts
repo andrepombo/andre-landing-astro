@@ -3,15 +3,15 @@ import { defineCollection, z } from 'astro:content';
 const projects = defineCollection({
   type: 'content',
   schema: z.object({
-    ref: z.string(),
     title: z.string(),
     description: z.string(),
+    title_pt: z.string().optional(),
+    description_pt: z.string().optional(),
     image: z.string(),
     href: z.string().optional(),
     tags: z.array(z.string()).default([]),
     highlight: z.string().optional(),
-    grayscale: z.boolean().optional(),
-    lang: z.enum(['en', 'pt']).default('en')
+    grayscale: z.boolean().optional()
   })
 });
 

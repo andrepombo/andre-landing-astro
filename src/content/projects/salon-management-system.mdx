@@ -1,19 +1,34 @@
 ---
-ref: app2
+slug: app2
 title: Salon Management System
-description: Full-stack salon management system that lets beauty salons manage clients, staff, services, and appointments in one place, with a modern React dashboard talking to a Django REST API.
+description: Full-stack salon management system that lets beauty salons manage
+  clients, staff, services, and appointments in one place, with a modern React
+  dashboard talking to a Django REST API.
+title_pt: Sistema de Gestão de Salão de Beleza
+description_pt: Sistema completo de gestão para salões de beleza que centraliza
+  clientes, equipe, serviços e agendamentos em um único lugar, com um painel
+  React moderno integrado a uma API Django REST.
 image: /uploads/hair-salon-vector-illustration-1.jpg
 href: https://app2.andrepombo.info/demo-login/?redirect=/dashboard
 tags:
   - CRUD
   - Docker
+  - ""
 grayscale: false
-lang: en
 ---
 
-A full-stack salon management system that centralizes daily operations for beauty salons.
+<div data-lang="en">
+
+---
+
+## Overview
+
+A full-stack salon management system that centralizes daily operations for beauty salons. The React/Vite frontend provides a modern, responsive dashboard integrated with a Django REST API. It supports client, team, services, and appointment management, with conflict prevention, localized validations, health checks, and analytics.
+
+## Key Features
 
 - **Client Management**  
+  Full CRUD with name, email, phone, and address. Brazilian phone validation and formatting.
 
 - **Team Management**  
   Manage professionals with contact info and specialties, linked to the services they perform.
@@ -68,3 +83,74 @@ A full-stack salon management system that centralizes daily operations for beaut
 - CORS configured for SPA development  
 - Environment variables for easy deployments  
 - Optional Docker setup for dev and production
+
+</div>
+
+<div data-lang="pt">
+
+---
+
+## Visão Geral
+
+Sistema completo de gestão para salões de beleza que centraliza as operações diárias. O frontend em React/Vite oferece um painel moderno e responsivo integrado a uma API Django REST. Suporta gestão de clientes, equipe, serviços e agendamentos, com prevenção de conflitos, validações localizadas, verificações de saúde da API e analytics.
+
+## Principais Funcionalidades
+
+- **Gestão de Clientes**  
+  CRUD completo com nome, e-mail, telefone e endereço. Validação e formatação de telefone brasileiro.
+
+- **Gestão de Equipe**  
+  Gerencie profissionais com informações de contato e especialidades, vinculados aos serviços que realizam.
+
+- **Catálogo de Serviços**  
+  Crie e mantenha serviços com nome, descrição, preço e duração (validados).
+
+- **Agendamento de Consultas**  
+  Agende atendimentos vinculando clientes, profissionais e um ou mais serviços. Registra data/hora, preço total, observações e fluxo de status:
+  agendado, confirmado, em andamento, concluído, cancelado, não compareceu.
+
+- **Prevenção de Conflitos**  
+  O backend impede duplo agendamento quando um profissional já está ocupado.
+
+- **Interface do Painel Administrativo**  
+  Navegação lateral para Dashboard, Clientes, Equipe, Serviços e Agendamentos. Design responsivo com gradientes e animações sutis.
+
+- **API-First + Documentação**  
+  API Django REST Framework com documentação Swagger/OpenAPI para clientes, equipe, serviços e agendamentos.
+
+- **Localização & Validação**  
+  Configurado para o locale brasileiro (fuso horário, idioma) e formatação/validação de telefone.
+
+- **Verificações de Saúde & Tratamento de Erros**  
+  O frontend testa a saúde da API, exibe o status de conexão em tempo real, mostra toasts de erro amigáveis e oferece retry.
+
+- **Analytics**  
+  Rastreamento de visualizações de página nas mudanças de rota para insights de uso.
+
+## Stack Tecnológica
+
+- **Frontend**: React 18, Vite, React Router, Axios, CSS3  
+- **Backend**: Django 5, Django REST Framework, drf-yasg (Swagger/OpenAPI), django-cors-headers, python-dotenv  
+- **Banco de Dados**: SQLite (dev) / PostgreSQL (pronto para produção)  
+- **DevOps**: Docker / Docker Compose, configuração baseada em variáveis de ambiente
+
+## Endpoints Principais
+
+- `/api/clients/` — listar/criar, `/api/clients/{id}/` — recuperar/atualizar/deletar  
+- `/api/team/` — listar/criar, `/api/team/{id}/` — recuperar/atualizar/deletar  
+- `/api/services/` — listar/criar, `/api/services/{id}/` — recuperar/atualizar/deletar  
+- `/api/appointments/` — listar/criar, `/api/appointments/{id}/` — recuperar/atualizar/deletar  
+- Documentação Swagger: `/swagger/`
+
+## Telas / UX
+
+- Painel com navegação lateral para tarefas operacionais  
+- Layout responsivo, tipografia limpa e indicadores de status de conectividade da API
+
+## Observações
+
+- CORS configurado para desenvolvimento SPA  
+- Variáveis de ambiente para facilitar implantações  
+- Configuração Docker opcional para desenvolvimento e produção
+
+</div>

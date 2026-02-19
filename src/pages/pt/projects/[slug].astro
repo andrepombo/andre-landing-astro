@@ -3,10 +3,10 @@ import Base from '../../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const projects = (await getCollection('projects')).filter((p) => p.data.lang === 'pt');
+  const projects = await getCollection('projects');
 
   return projects.map((project) => ({
-    params: { slug: project.data.ref },
+    params: { slug: project.slug },
     props: { project }
   }));
 }
@@ -17,37 +17,40 @@ const { project } = Astro.props as {
 
 const { Content } = await project.render();
 const data = project.data;
-const allProjects = await getCollection('projects');
-const hasEn = allProjects.some((p) => p.data.ref === data.ref && p.data.lang === 'en');
-const toggleUrl = hasEn ? `/projects/${data.ref}` : undefined;
+const lang = 'pt';
+const toggleUrl = `/projects/${project.slug}`;
+const title = data.title_pt ?? data.title;
+const description = data.description_pt ?? data.description;
 ---
-<Base title={data.title} description={data.description} lang="pt">
-  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-    <a
-      href="/pt/"
-      class="fixed top-5 left-4 sm:top-6 sm:left-6 inline-flex items-center text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur px-3 py-2 rounded-full border border-slate-200 dark:border-slate-800 shadow-sm"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <polyline points="15 18 9 12 15 6" />
-      </svg>
-      Voltar para projetos
-    </a>
-
-    {toggleUrl && (
+<Base title={title} description={description} lang={lang}>
+  <style>
+    [data-lang="en"] { display: none; }
+    [data-lang="pt"] { display: block; }
+  </style>
+  <header class="sticky top-0 z-40 border-b border-slate-200/10 dark:border-slate-800/80 bg-white/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:bg-slate-950/70">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <a href="/pt/" class="inline-flex items-center text-sm text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+        Voltar para projetos
+      </a>
       <a
         href={toggleUrl}
         aria-label="Mudar para Inglês"
-        class="fixed top-5 right-4 sm:top-6 sm:right-6 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs bg-slate-900 text-white border border-slate-800/80 dark:bg-slate-800 dark:text-slate-50 dark:border-slate-700 z-40"
+        class="px-3 py-1.5 rounded-full text-xs bg-slate-900 text-white border border-slate-800/80 dark:bg-slate-800 dark:text-slate-50 dark:border-slate-700 inline-flex items-center gap-1.5"
       >
         <span>EN</span><span>🇬🇧</span>
       </a>
-    )}
+    </div>
+  </header>
 
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
     <article class={"space-y-6 " + (data.grayscale ? 'grayscale' : '')}>
       <header class="space-y-3">
         <p class="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Projeto</p>
-        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">{data.title}</h1>
-        <p class="text-base text-slate-600 dark:text-slate-300">{data.description}</p>
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">{title}</h1>
+        <p class="text-base text-slate-600 dark:text-slate-300">{description}</p>
 
         {(data.tags?.length || data.href) && (
           <div class="flex items-center gap-2 pt-1">
@@ -81,7 +84,7 @@ const toggleUrl = hasEn ? `/projects/${data.ref}` : undefined;
         <div class="mt-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900">
           <img
             src={data.image}
-            alt={data.title}
+            alt={title}
             class="w-full h-auto object-cover"
             loading="lazy"
             decoding="async"

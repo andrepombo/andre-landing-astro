@@ -22,12 +22,14 @@ const meta = {
   links: { github: 'https://github.com/andrepombo', x: 'https://x.com/', linkedin: 'https://www.linkedin.com/in/andrepombo/', medium: 'https://medium.com/' }
 };
 
-const projectCollection = (await getCollection('projects')).filter((p) => p.data.lang === 'en');
+const projectCollection = await getCollection('projects');
 const projectFiles = projectCollection.map((project) => ({
-  url: `/projects/${project.data.ref}`,
+  url: `/projects/${project.slug}`,
   frontmatter: {
     title: project.data.title,
     description: project.data.description,
+    title_pt: project.data.title_pt,
+    description_pt: project.data.description_pt,
     image: project.data.image,
     href: project.data.href ?? '',
     tags: project.data.tags,
